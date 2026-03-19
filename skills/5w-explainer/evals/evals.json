@@ -1,0 +1,23 @@
+{
+  "skill_name": "5w-explainer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "什么是 Docker？",
+      "expected_output": "使用 5W 结构详细解释 Docker，包括 What（定义）、Who（目标用户）、When（使用场景）、Where（应用环境）、Why（价值）",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "帮我解释一下什么是敏捷开发",
+      "expected_output": "使用 5W 结构详细解释敏捷开发方法论，每个维度都有充分的展开说明",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "RESTful API 是什么意思？",
+      "expected_output": "使用 5W 结构解释 RESTful API，用简明清晰的中文，适合开发者理解",
+      "files": []
+    }
+  ]
+}

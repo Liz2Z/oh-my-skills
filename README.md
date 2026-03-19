@@ -43,6 +43,33 @@ Task management and productivity specialist for organizing work effectively.
 
 **Trigger:** Use when managing tasks, planning work, or organizing TODOs.
 
+### 5W Explainer (5W 解释器)
+Systematic explanation framework using the 5W structure (What, Who, When, Where, Why).
+- Explains any concept, technology, product, or process
+- Structured approach for comprehensive understanding
+- Clear definitions and context
+- User-centric explanations
+
+**Trigger:** Use when user asks "what is X", "explain X", "help me understand X", or needs systematic explanation of any topic.
+
+### Life OS
+Personal knowledge management system for organizing thoughts and insights.
+- Record thoughts and insights
+- Track AI conversations
+- Manage personal principles and methodologies
+- Semantic search capabilities
+
+**Trigger:** Use when user asks to record/search thoughts, conversations, principles, or update personal knowledge.
+
+### Biz Explainer (业务梳理)
+Business logic visualization using Mermaid diagrams for non-technical stakeholders.
+- Deep analysis of business logic from code
+- Mermaid diagram generation
+- Comprehensive documentation creation
+- Non-technical friendly explanations
+
+**Trigger:** Use when user wants to analyze business processes, visualize workflows with Mermaid, or generate business documentation.
+
 ## Usage
 
 Once installed, Claude Code will automatically invoke these skills when relevant to your task. You can also explicitly reference a skill by name:
@@ -51,6 +78,9 @@ Once installed, Claude Code will automatically invoke these skills when relevant
 "Use the git-wizard skill to help resolve this merge conflict"
 "Let me use code-explainer to understand this function"
 "Help me organize my tasks with todo-master"
+"Use 5w-explainer to help me understand this concept"
+"I want to record this thought using life-os"
+"Analyze the business logic and create Mermaid diagrams using biz-explainer"
 ```
 
 ## Development
