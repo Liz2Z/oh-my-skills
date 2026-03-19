@@ -1,7 +1,7 @@
 {
-  "name": "oh-my-cc-skills",
+  "name": "oh-my-skills",
   "owner": {
-    "name": "zan"
+    "name": "Liz2Z"
   },
   "metadata": {
     "description": "A collection of useful Claude Code skills for enhanced productivity",
@@ -9,12 +9,12 @@
   },
   "plugins": [
     {
-      "name": "oh-my-cc-skills",
+      "name": "oh-my-skills",
       "source": "./",
       "description": "A curated collection of Claude Code skills for development workflow enhancement",
       "version": "1.0.0",
       "author": {
-        "name": "zan"
+        "name": "Liz2Z"
       },
       "license": "MIT",
       "keywords": [

@@ -11,7 +11,7 @@ This marketplace plugin provides useful skills that extend Claude Code's capabil
 Add this repository to your Claude Code environment:
 
 ```bash
-/plugin marketplace add zan/oh-my-cc-skills
+/plugin marketplace add Liz2Z/oh-my-skills
 ```
 
 ## Included Skills
@@ -98,7 +98,7 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 ## Author
 
-Created by @zan
+Created by @Liz2Z
 
 ## Resources
 
