@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "A collection of useful Claude Code skills for enhanced productivity",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "plugins": [
     {
       "name": "oh-my-skills",
       "source": "./",
       "description": "A curated collection of Claude Code skills for development workflow enhancement",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": {
         "name": "Liz2Z"
       },
@@ -25,11 +25,7 @@
         "workflow"
       ],
       "category": "development",
-      "tags": [
-        "skills",
-        "workflow",
-        "productivity"
-      ],
+      "tags": ["skills", "workflow", "productivity"],
       "skills": "./skills/"
     }
   ]
