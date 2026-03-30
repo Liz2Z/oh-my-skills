@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+# pre-push hook: use Claude to analyze pending changes and bump version accordingly.
+# The version bump commit will be included in the push.
+#
+# Usage: git push [--no-verify] to skip this hook
+
+set -eo pipefail
+
+# Skip if --no-verify is used
+if [ "$SKIP_VERSION_BUMP" = "1" ]; then
+  exit 0
+fi
+
+MARKETPLACE_FILE=".claude-plugin/marketplace.json"
+
+if [ ! -f "$MARKETPLACE_FILE" ]; then
+  echo "⚠️  marketplace.json not found, skipping version bump"
+  exit 0
+fi
+
+# Get current version
+current_version=$(grep -m1 '"version"' "$MARKETPLACE_FILE" | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+
+if [ -z "$current_version" ]; then
+  echo "⚠️  Could not parse version from $MARKETPLACE_FILE"
+  exit 1
+fi
+
+# Get the commits that are about to be pushed
+# $1 = remote name, $2 = remote url
+# stdin provides: <local ref> <local sha1> <remote ref> <remote sha1>
+remote_ref=""
+while read -r _local_ref _local_sha remote_ref _remote_sha; do
+  break
+done
+
+# Find commits not yet on remote
+if [ -n "$remote_ref" ] && [ "$_remote_sha" != "0000000000000000000000000000000000000000" ]; then
+  pending_commits=$(git log "${_remote_sha}..${_local_sha}" --pretty=format:"%h %s" 2>/dev/null || echo "")
+else
+  # New branch: get all commits not on main
+  pending_commits=$(git log origin/main..HEAD --pretty=format:"%h %s" 2>/dev/null || echo "")
+fi
+
+if [ -z "$pending_commits" ]; then
+  echo "ℹ️  No new commits to analyze, skipping version bump"
+  exit 0
+fi
+
+echo "📋 Pending commits:"
+echo "$pending_commits"
+echo ""
+
+# Use Claude to analyze changes and determine new version
+prompt=$(cat <<'PROMPT_EOF'
+You are a version bumper. Analyze the pending git commits and determine the appropriate version bump.
+
+Current version: CURRENT_VERSION_PLACEHOLDER
+
+Pending commits:
+COMMITS_PLACEHOLDER
+
+Rules:
+- If commits contain ONLY chore/cosmetic changes (chore, docs, style, refactor): bump PATCH
+- If commits contain new features (feat): bump MINOR
+- If commits contain breaking changes (feat! or BREAKING CHANGE): bump MAJOR
+
+Respond with ONLY the new version number, nothing else. Example: 1.2.3
+PROMPT_EOF
+)
+
+prompt="${prompt//CURRENT_VERSION_PLACEHOLDER/$current_version}"
+prompt="${prompt//COMMITS_PLACEHOLDER/$pending_commits}"
+
+new_version=$(claude -p "$prompt" --allowedTools '' --output-format text 2>/dev/null | tr -d '[:space:]')
+
+if [ -z "$new_version" ]; then
+  echo "⚠️  Claude did not return a version, falling back to patch bump"
+  IFS='.' read -r major minor patch <<< "$current_version"
+  new_patch=$((patch + 1))
+  new_version="$major.$minor.$new_patch"
+fi
+
+# Validate new version format
+if ! echo "$new_version" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+  echo "⚠️  Invalid version format: $new_version, falling back to patch bump"
+  IFS='.' read -r major minor patch <<< "$current_version"
+  new_patch=$((patch + 1))
+  new_version="$major.$minor.$new_patch"
+fi
+
+# Skip if version unchanged
+if [ "$new_version" = "$current_version" ]; then
+  echo "ℹ️  Version unchanged ($current_version), skipping commit"
+  exit 0
+fi
+
+# Update marketplace.json
+tmp=$(mktemp)
+sed "s/\"version\": \"$current_version\"/\"version\": \"$new_version\"/g" "$MARKETPLACE_FILE" > "$tmp"
+mv "$tmp" "$MARKETPLACE_FILE"
+
+# Commit the version bump (with --no-verify to prevent re-triggering this hook)
+git add "$MARKETPLACE_FILE"
+git commit -m "chore: bump version $current_version → $new_version" --no-verify
+
+echo "✅ Version bumped: $current_version → $new_version"
