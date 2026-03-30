@@ -105,3 +105,10 @@ git add "$MARKETPLACE_FILE"
 git commit -m "chore: bump version $current_version → $new_version" --no-verify
 
 echo "✅ Version bumped: $current_version → $new_version"
+
+# Git already determined the push range before this hook ran,
+# so the new commit won't be included. We push it ourselves here,
+# then exit non-zero to cancel the original (now redundant) push.
+echo "🚀 Pushing all commits including version bump..."
+git push --no-verify
+exit 1
