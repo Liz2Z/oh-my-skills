@@ -2,7 +2,7 @@
 name: discuss
 description: 当用户需要讨论方案、分析问题、做决策、梳理思路、寻求建议、权衡利弊，或使用"帮我分析一下"、"讨论一下"、"怎么看"、"怎么选"、"给我出出主意"、"纠结"、"犹豫"等表述时触发此技能。
 disable-model-invocation: true
-allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, LSP, Agent
+allowed-tools: Read, Grep, Glob, WebSearch, WebFetch, LSP, Agent, AskUserQuestion
 license: MIT
 ---
 
